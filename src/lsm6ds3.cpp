@@ -34,7 +34,7 @@ uint8_t LSM6DS3_gax::readReg(uint8_t addr) {
 void LSM6DS3_gax::readRegs(uint8_t addr, uint8_t *buff, uint8_t count) {
   uint8_t spiAddr = 0x80 | addr;
   csLow();
-  for (count; count > 0; count--) {
+  for (; count > 0; count--) {
     spiAddr = 0x80 | addr;
     HAL_SPI_TransmitReceive(_spi, &spiAddr, buff, 1, 100);
     addr++;
@@ -42,7 +42,7 @@ void LSM6DS3_gax::readRegs(uint8_t addr, uint8_t *buff, uint8_t count) {
   } csHigh();
 }
 
-uint8_t LSM6DS3_gax::enable(void) {
+uint8_t LSM6DS3_gax::init(void) {
   csHigh();
   if (readReg(LSM6DS3_WHO_AM_I_REG) != 0x69) goto fail;
   writeReg(LSM6DS3_CTRL2_G, 0x4C);
